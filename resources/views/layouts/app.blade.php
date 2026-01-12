@@ -23,28 +23,6 @@
 
 <body class="antialiased">
     <div class="min-h-screen bg-gray-100">
-        @if (session('success'))
-            <div class="bg-green-500 text-white px-4 py-3 rounded relative" role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="bg-red-500 text-white px-4 py-3 rounded relative" role="alert">
-                <span class="block sm:inline">{{ session('error') }}</span>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="bg-red-500 text-white px-4 py-3 rounded relative" role="alert">
-                <ul class="list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
         @yield('content')
     </div>
 </body>

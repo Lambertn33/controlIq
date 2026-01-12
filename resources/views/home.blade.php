@@ -19,6 +19,7 @@
                     <div class="mt-6 space-y-4">
                         <div class="bg-white p-4 rounded-lg shadow">
                             <h3 class="font-semibold text-gray-900 mb-3">Start Chatting</h3>
+                            <livewire:chat />
                         </div>
                     </div>
                 </div>
