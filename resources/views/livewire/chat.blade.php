@@ -1,8 +1,15 @@
-<div>
+<div class="flex flex-col gap-4">
     <div class="flex flex-col gap-4">
         @foreach ($messages as $message)
-            <div class="bg-white p-4 rounded-lg shadow">
-                {{ $message }}
+            <div class="flex {{ $message['role'] === 'user' ? 'justify-end' : 'justify-start' }}">
+                <div
+                    class="max-w-[80%] rounded-lg px-4 py-2 {{ $message['role'] === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100' }}">
+                    <p class="whitespace-pre-wrap">{{ $message['message'] }}</p>
+                    <p class="text-xs mt-1 opacity-70">
+                        {{ $message['role'] === 'user' ? 'You' : 'Assistant' }} •
+                        {{ \Carbon\Carbon::parse($message['timestamp'])->format('H:i') }}
+                    </p>
+                </div>
             </div>
         @endforeach
     </div>

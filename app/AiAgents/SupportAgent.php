@@ -22,8 +22,27 @@ class SupportAgent extends Agent
 
     protected $tools = [];
 
+    public function __construct()
+    {
+        parent::__construct($this->provider);
+        $this->initializeAuth();
+    }
+
+    protected function initializeAuth()
+    {
+        $authServicesCheck = AuthServices::checkIfUserIsAuthenticated();
+        $authServicesAdmin = AuthServices::isUserAdmin();
+
+        $this->isAuthenticated = $authServicesCheck['isAuthenticated'];
+        $this->user = $authServicesCheck['user'];
+        $this->isAdmin = $authServicesAdmin;
+    }
+
     public function instructions()
     {
+        // Ensure auth is always up-to-date when instructions are generated
+        $this->initializeAuth();
+        
         return view('prompts.support-agent-instructions', [
             'isAuthenticated' => $this->isAuthenticated,
             'user' => $this->user,

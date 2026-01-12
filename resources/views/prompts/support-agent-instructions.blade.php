@@ -9,12 +9,16 @@ not authenticated.
 
 # User Information
 
-is user authenticated? {{ $isAuthenticated }}
-is user admin? {{ $isAdmin }}
-if the user is authenticated then the user information is:
-Name: {{ $user->name }}
-Role: {{ $user->role }}
-Email: {{ $user->email }}
+is user authenticated? {{ $isAuthenticated ? 'true' : 'false' }}
+is user admin? {{ $isAdmin ? 'true' : 'false' }}
+@if ($isAuthenticated && $user)
+    if the user is authenticated then the user information is:
+    Name: {{ $user->name }}
+    Role: {{ $user->role }}
+    Email: {{ $user->email }}
+@else
+    User is not authenticated.
+@endif
 
 {{-- only the admin can request to create a new user and a new product. if the user is not an admin, you should inform them
 that they are not authorized to create a new user or product.
