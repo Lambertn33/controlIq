@@ -3,6 +3,8 @@
 namespace App\AiAgents;
 
 use LarAgent\Agent;
+use App\Services\ProductsServices;
+use LarAgent\Attributes\Tool;
 
 use App\Services\AuthServices;
 
@@ -63,6 +65,18 @@ class SupportAgent extends Agent
         $this->isAuthenticated = $authServicesCheck['isAuthenticated'];
         $this->user = $authServicesCheck['user'];
         $this->isAdmin = $authServicesAdmin;
+
+        \Log::info('SupportAgent initialized', [
+            'isAuthenticated' => $this->isAuthenticated,
+            'user' => $this->user,
+            'isAdmin' => $this->isAdmin,
+        ]);
+    }
+
+    #[Tool('get the categories in case the user wants to view them')]
+    public function viewCategories()
+    {
+        return ProductsServices::getAllCategories();
     }
     
 }

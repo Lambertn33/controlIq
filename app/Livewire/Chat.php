@@ -6,6 +6,8 @@ use Livewire\Component;
 
 use App\AiAgents\SupportAgent;
 
+use App\Services\AuthServices;
+
 class Chat extends Component
 {
     public $messages = [];
@@ -13,6 +15,8 @@ class Chat extends Component
     public $enteredMessage = '';
 
     public $isSending = false;
+
+    public $isAuthenticated = false;
 
     protected function getSupportAgent()
     {
@@ -46,11 +50,10 @@ class Chat extends Component
 
     public function mount()
     {
-        if (auth()->check()) {
-            $this->addMessage('assistant', 'Hello, ' . auth()->user()->name . ', how can I help you today?');
-        } else {
-            $this->addMessage('assistant', 'Hello, we can\'t help you if you\'re not authenticated. Please login to use the system.');
-        }
+        $this->messages = [];
+        $this->enteredMessage = '';
+        $this->isSending = false;
+        $this->isAuthenticated = AuthServices::checkIfUserIsAuthenticated()['isAuthenticated'];
     }
 
     public function render()

@@ -4,7 +4,7 @@
             <div class="flex items-center">
                 <a href="{{ route('home') }}"
                     class="text-xl font-semibold text-gray-900 hover:text-indigo-600 transition-colors">
-                    {{ config('app.name', 'Laravel') }}
+                    ControliQ
                 </a>
             </div>
             <div class="flex items-center space-x-4">
