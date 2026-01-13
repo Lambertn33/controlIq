@@ -8,8 +8,8 @@
         @include('components.nav')
 
         <!-- Main Content -->
-        <main class="py-6 sm:px-6 lg:px-8 flex justify-between gap-4">
-            <div class="px-4 py-6 sm:px-0 w-full">
+        <main class="py-6 sm:px-6 lg:px-8 flex gap-4">
+            <div class="px-4 py-6 sm:px-0 flex-1">
                 <div class="border-4 border-dashed border-gray-200 rounded-lg p-8">
                     <h2 class="text-2xl font-bold text-gray-900 mb-4">Welcome</h2>
 
@@ -23,9 +23,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="mt-6 space-y-4 w-full">
-                data
             </div>
         </main>
     </div>

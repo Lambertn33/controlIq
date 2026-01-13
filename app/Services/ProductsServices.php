@@ -41,6 +41,6 @@ class ProductsServices
 
     public static function getAllCategories()
     {
-        return Category::pluck('name');
+        return Category::get();
     }
 }
