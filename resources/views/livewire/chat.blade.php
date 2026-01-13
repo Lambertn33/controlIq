@@ -12,6 +12,22 @@
         }
 }" x-init="scrollToBottom()"
     @scroll-to-bottom.window="scrollToBottom()" x-effect="$watch('$wire.messages.length', () => scrollToBottom())">
+    <!-- Messages Container Header -->
+    <div class="flex items-center justify-between mb-2 px-2">
+        <h3 class="text-sm font-semibold text-gray-700">Chat History</h3>
+        @if (count($messages) > 0)
+            <button type="button" wire:click="clearMessages"
+                class="flex items-center cursor-pointer gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                    </path>
+                </svg>
+                Clear chat
+            </button>
+        @endif
+    </div>
+
     <!-- Messages Container -->
     <div class="flex-1 flex flex-col gap-3 overflow-y-auto p-2 mb-4 bg-gray-50 rounded-lg" id="chat-messages">
         @forelse($messages as $message)

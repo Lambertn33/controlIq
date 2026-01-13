@@ -86,6 +86,21 @@ class Chat extends Component
         $this->dispatch('scroll-to-bottom');
     }
 
+    public function clearMessages()
+    {
+        try {
+            $agent = $this->getSupportAgent();
+            $chatHistory = $agent->chatHistory();
+            $chatHistory->clear();
+            $this->messages = [];
+            $this->dispatch('scroll-to-bottom');
+        } catch (\Throwable $th) {
+            \Log::error('Error clearing chat history: ' . $th->getMessage());
+            // Still clear the component messages even if history clear fails
+            $this->messages = [];
+        }
+    }
+
     protected function normalizeAgentMessage($message): ?array
     {
         $role = $message['role'] ?? null;
