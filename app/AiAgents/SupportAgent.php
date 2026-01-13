@@ -6,6 +6,7 @@ use LarAgent\Agent;
 use App\Services\ProductsServices;
 use LarAgent\Attributes\Tool;
 use App\Services\AuthServices;
+use App\Services\UserServices;
 
 class SupportAgent extends Agent
 {
@@ -63,12 +64,6 @@ class SupportAgent extends Agent
         $this->isAuthenticated = $authServicesCheck['isAuthenticated'];
         $this->user = $authServicesCheck['user'];
         $this->isAdmin = $authServicesAdmin;
-
-        \Log::info('SupportAgent initialized', [
-            'isAuthenticated' => $this->isAuthenticated,
-            'user' => $this->user,
-            'isAdmin' => $this->isAdmin,
-        ]);
     }
 
     #[Tool('get the system categories in case the user wants to view them')]
@@ -118,5 +113,17 @@ class SupportAgent extends Agent
     public function createProduct(string $name, float $price, int $quantity, string $category)
     {
         return ProductsServices::createProduct($name, $price, $quantity, $category);
+    }
+
+    #[Tool('get all users. Use this when an admin asks to get all users')]
+    public function getAllUsers()
+    {
+        return UserServices::getAllUsers();
+    }
+
+    #[Tool('get a user by name. Use this when an admin asks to get a user by name')]
+    public function getUserByName(string $name)
+    {
+        return UserServices::getUserByName($name);
     }
 }
