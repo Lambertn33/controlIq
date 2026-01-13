@@ -1,14 +1,16 @@
 # ControlIq
 
-A Laravel application with AI-powered chat support, built with Livewire and LarAgent.
+A modern Laravel application with AI-powered chat support, built with Livewire and LarAgent. Features a beautiful, responsive UI with session-persistent chat history and role-based access control.
 
 ## Features
 
 - 🔐 **Manual Authentication** - Login-based authentication system (no registration)
-- 🤖 **AI Chat Support** - Interactive chat interface powered by LarAgent
-- 👥 **User Management** - Role-based access control (Admin/User)
-- 📦 **Product & Category Management** - Manage products and categories
-- 🎨 **Modern UI** - Built with Tailwind CSS and Livewire
+- 🤖 **AI Chat Support** - Interactive chat interface powered by LarAgent with session-based history
+- 👥 **User Management** - Role-based access control (Admin/User) with secure tool access
+- 📦 **Product & Category Management** - Full CRUD operations for products and categories
+- 🎨 **Modern UI** - Beautiful gradient design with Tailwind CSS, Livewire, and Alpine.js
+- 🚀 **Livewire Navigation** - Seamless page transitions without full page reloads
+- 💬 **Persistent Chat** - Chat history persists across page navigation using session storage
 - 🐳 **Docker Support** - Easy development setup with Docker
 
 ## Requirements
@@ -110,42 +112,53 @@ php artisan serve
 After running seeders, you'll have these default users:
 
 - **Admin User:**
-  - Email: `admin@example.com`
+  - Email: `admin@controliq.com`
   - Password: `password`
   - Role: `ADMIN`
+  - Can access all features including user management, category/product creation
 
 - **Regular User:**
-  - Email: `user@example.com`
+  - Email: `user@controliq.com`
   - Password: `password`
   - Role: `USER`
+  - Can view products/categories and chat with AI, but cannot create or access user information
 
 ## Project Structure
 
 ```
 app/
 ├── AiAgents/
-│   └── SupportAgent.php      # AI chat agent configuration
+│   └── SupportAgent.php          # AI chat agent with tools and authentication
 ├── Http/
 │   └── Controllers/
-│       └── AuthController.php # Authentication controller
+│       └── AuthController.php    # Authentication controller
 ├── Livewire/
-│   └── Chat.php               # Livewire chat component
+│   ├── Chat.php                   # Livewire chat component
+│   ├── Categories.php             # Categories display component
+│   └── Products.php               # Products display component
 ├── Models/
-│   ├── User.php
-│   ├── Category.php
-│   └── Product.php
+│   ├── User.php                   # User model with role support
+│   ├── Category.php               # Category model
+│   └── Product.php                # Product model with category relationship
 └── Services/
-    └── AuthServices.php      # Authentication service
+    ├── AuthServices.php           # Authentication service
+    ├── ProductsServices.php       # Product and category business logic
+    └── UserServices.php          # User management service
 
 resources/
 ├── views/
 │   ├── auth/
-│   │   └── login.blade.php   # Login page
+│   │   └── login.blade.php       # Modern login page
 │   ├── components/
-│   │   └── nav.blade.php     # Navigation component
-│   ├── home.blade.php        # Home page
+│   │   └── nav.blade.php         # Reusable navigation component
+│   ├── layouts/
+│   │   └── app.blade.php         # Main application layout
+│   ├── home.blade.php             # Home page with welcome section
+│   ├── data.blade.php             # Data page with categories and products
 │   ├── livewire/
-│   │   └── chat.blade.php    # Chat interface
+│   │   ├── chat.blade.php        # Chat interface with modern design
+│   │   ├── categories.blade.php  # Categories table view
+│   │   └── products.blade.php    # Products table view
 │   └── prompts/
 │       └── support-agent-instructions.blade.php # AI agent instructions
 ```
@@ -163,15 +176,43 @@ resources/
 
 The application includes an AI-powered support agent built with LarAgent:
 
-- **SupportAgent**: Handles user queries and provides support
-- Authentication-aware: The agent knows if the user is authenticated and their role
-- Customizable instructions via Blade templates
+- **SupportAgent**: Handles user queries and provides intelligent support
+- **Session-based History**: Chat history persists across page navigation using LarAgent's session storage
+- **Authentication-aware**: The agent knows if the user is authenticated and their role
+- **Role-based Tool Access**: Different tools available based on user role (Admin vs User)
+- **Customizable Instructions**: Instructions are dynamically generated via Blade templates based on user role
+
+#### Available AI Tools
+
+**For All Users:**
+- `viewCategories` - View all product categories
+- `viewProducts` - View products (optionally filtered by category)
+- `searchProduct` - Search for products by name
+
+**Admin Only:**
+- `createCategory` - Create new categories
+- `checkIfCategoryExists` - Check if a category exists
+- `createProduct` - Create new products
+- `checkIfProductExists` - Check if a product exists
+- `getAllUsers` - Get all users in the system
+- `getUserByName` - Search for users by name
+
+**Security Features:**
+- Non-admin users cannot access user information tools
+- AI agent is instructed to decline non-system related questions
+- Tool access is restricted at both instruction and code level
 
 ### Models
 
-- **User**: Authentication and user management
-- **Category**: Product categories
-- **Product**: Products with category relationships
+- **User**: Authentication and user management with role-based access (ADMIN/USER)
+- **Category**: Product categories with name field
+- **Product**: Products with name, price, quantity, and category relationship
+
+### Pages
+
+- **Home Page (`/`)**: Welcome page with AI chat interface, accessible to all users
+- **Data Page (`/data`)**: View categories and products in a two-column layout, requires authentication
+- **Login Page (`/login`)**: Modern login form with gradient design, guest-only access
 
 ## Configuration
 
@@ -236,29 +277,46 @@ docker-compose exec app php artisan <command>
 
 ## Routes
 
-- `GET /` - Home page (accessible to all)
+- `GET /` - Home page (accessible to all, shows chat for authenticated users)
 - `GET /login` - Login page (guest only)
 - `POST /login` - Handle login
 - `POST /logout` - Handle logout (authenticated only)
+- `GET /data` - Data page with categories and products (authenticated only)
 
 ## Technologies
 
 - **Laravel 12** - PHP framework
-- **Livewire** - Full-stack framework for Laravel
-- **LarAgent** - AI agent framework
-- **Tailwind CSS** - Utility-first CSS framework
+- **Livewire** - Full-stack framework for Laravel with wire:navigate for seamless navigation
+- **LarAgent** - AI agent framework with session-based chat history
+- **Alpine.js** - Lightweight JavaScript framework for interactivity
+- **Tailwind CSS** - Utility-first CSS framework with modern gradient designs
 - **MySQL** - Database
-- **Docker** - Containerization
+- **Docker** - Containerization for easy development setup
 
-## License
+## Key Features Explained
 
-This project is open-sourced software licensed under the [MIT license](LICENSE).
+### Chat History Persistence
 
-## Contributing
+The chat uses LarAgent's session storage (`protected $history = 'session'`) to persist conversation history:
+- Chat messages are stored in the Laravel session
+- History persists across page navigation using `wire:navigate`
+- History is automatically cleared when user logs out (session destroyed)
+- Messages are loaded from session on component mount
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+### Role-Based Access Control
 
-## Support
+The AI agent enforces role-based access:
+- **Admin users** can create categories/products and access user information
+- **Regular users** can only view categories/products and chat
+- Tool access is restricted both in instructions and code
+- Non-admin users receive clear messages when trying to access restricted features
 
-For support, please open an issue in the repository.
+### Modern UI Design
+
+- Gradient backgrounds (gray → indigo → purple)
+- Modern card designs with shadows and rounded corners
+- Responsive grid layouts
+- Smooth transitions and hover effects
+- Professional icon usage throughout
+- Consistent color scheme across all pages
 
