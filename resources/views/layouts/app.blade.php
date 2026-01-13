@@ -14,6 +14,7 @@
 
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
     <style>
         body {
             font-family: 'Figtree', sans-serif;
@@ -25,6 +26,7 @@
     <div class="min-h-screen bg-gray-100">
         @yield('content')
     </div>
+    @livewireScripts
 </body>
 
 </html>

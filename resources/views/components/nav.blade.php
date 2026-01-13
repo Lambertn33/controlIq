@@ -2,14 +2,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
-                <a href="{{ route('home') }}"
+                <a href="{{ route('home') }}" wire:navigate
                     class="text-xl font-semibold text-gray-900 hover:text-indigo-600 transition-colors">
                     ControliQ
                 </a>
             </div>
             <div class="flex items-center space-x-4">
                 @auth
-                    <a href="{{ route('data') }}" class="text-gray-700 hover:text-indigo-600 transition-colors">
+                    <a href="{{ route('data') }}" wire:navigate class="text-gray-700 hover:text-indigo-600 transition-colors">
                         Data
                     </a>
                     <span class="text-gray-700">Welcome, {{ Auth::user()->name }}!</span>

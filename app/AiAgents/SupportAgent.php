@@ -11,7 +11,7 @@ class SupportAgent extends Agent
 {
     protected $model = 'gpt-4.1-nano';
 
-    protected $history = 'in_memory';
+    protected $history = 'session';
 
     protected $provider = 'default';
 
@@ -94,5 +94,17 @@ class SupportAgent extends Agent
     public function searchProduct(string $name)
     {
         return ProductsServices::getProductsByName($name);
+    }
+
+    #[Tool('create a new category. Use this when user asks to create a new category. Pass the category name to create')]
+    public function createCategory(string $name)
+    {
+        return ProductsServices::createCategory($name);
+    }
+
+    #[Tool('check if a category exists. Use this when user asks to check if a category exists. Pass the category name to check')]
+    public function checkIfCategoryExists(string $name)
+    {
+        return ProductsServices::checkIfCategoryExists($name);
     }
 }

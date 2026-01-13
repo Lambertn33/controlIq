@@ -43,4 +43,14 @@ class ProductsServices
     {
         return Category::get();
     }
+
+    public static function createCategory(string $name)
+    {
+        return Category::create(['name' => $name]);
+    }
+
+    public static function checkIfCategoryExists(string $name)
+    {
+        return Category::where('name', $name)->exists();
+    }
 }
