@@ -54,6 +54,15 @@ class Chat extends Component
         $this->enteredMessage = '';
         $this->isSending = false;
         $this->isAuthenticated = AuthServices::checkIfUserIsAuthenticated()['isAuthenticated'];
+
+        $agent = $this->getSupportAgent();
+        $chatHistory = $agent->chatHistory();
+        foreach ($chatHistory->getMessages() as $message) {
+            $normalized = $this->normalizeAgentMessage($message);
+            if ($normalized && $normalized !== null) {
+                $this->messages[] = $normalized;
+            }
+        }
     }
 
     public function render()
@@ -75,5 +84,53 @@ class Chat extends Component
     public function updatedMessages()
     {
         $this->dispatch('scroll-to-bottom');
+    }
+
+    protected function normalizeAgentMessage($message): ?array
+    {
+        $role = $message['role'] ?? null;
+
+        // 1) Skip system messages
+        if ($role === 'system') {
+            return null;
+        }
+
+        $content = $message['content'] ?? null;
+        $text = null;
+
+        if (is_array($content) && isset($content[0]) && is_array($content[0])) {
+            foreach ($content as $block) {
+                if (($block['type'] ?? null) === 'text') {
+                    $text = $block['text'] ?? null;
+                    break;
+                }
+            }
+        }
+
+        // 3) ASSISTANT shape: content is a single object-like array: ['type'=>'text','text'=>'...']
+        if ($text === null && is_array($content) && isset($content['type'])) {
+            if (($content['type'] ?? null) === 'text') {
+                $text = $content['text'] ?? null;
+            }
+        }
+
+        // 4) Fallback: if content is plain string (just in case)
+        if ($text === null && is_string($content)) {
+            $text = $content;
+        }
+
+        $text = is_string($text) ? trim($text) : null;
+
+        if ($text === null || $text === '') {
+            return null;
+        }
+
+        return [
+            'role' => $role, // user | assistant
+            'message' => $text,
+            'timestamp' => isset($message['message_created'])
+                ? \Carbon\Carbon::parse($message['message_created'])->toDateTimeString()
+                : now()->toDateTimeString(),
+        ];
     }
 }
