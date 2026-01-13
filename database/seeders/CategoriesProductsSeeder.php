@@ -77,10 +77,15 @@ class CategoriesProductsSeeder extends Seeder
                 ],
             ],
         ];
-        foreach ($categories as $category) {
-            $category = Category::create(['name' => $category['name']]);
-            foreach ($category['products'] as $product) {
-                $category->products()->create($product);
+        foreach ($categories as $categoryData) {
+            $category = Category::create(['name' => $categoryData['name']]);
+            foreach ($categoryData['products'] as $product) {
+                Product::create([
+                    'name' => $product['name'], 
+                    'price' => $product['price'],
+                    'quantity' => $product['quantity'],
+                    'category_id' => $category->id,
+                ]);
             }
         }
     }

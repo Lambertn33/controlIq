@@ -1,7 +1,18 @@
-<div class="flex flex-col gap-4">
-    <div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4" x-data="{
+    scrollToBottom() {
+        this.$nextTick(() => {
+            const container = document.getElementById('chat-messages');
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+        });
+    }
+}" x-init="scrollToBottom()" @scroll-to-bottom.window="scrollToBottom()"
+    x-effect="$watch('$wire.messages.length', () => scrollToBottom())">
+    <div class="flex flex-col gap-4 max-h-[400px] overflow-y-auto p-2" id="chat-messages">
         @foreach ($messages as $message)
-            <div class="flex {{ $message['role'] === 'user' ? 'justify-end' : 'justify-start' }}">
+            <div class="flex {{ $message['role'] === 'user' ? 'justify-end' : 'justify-start' }}"
+                wire:key="message-{{ $loop->index }}">
                 <div
                     class="max-w-[80%] rounded-lg px-4 py-2 {{ $message['role'] === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100' }}">
                     <p class="whitespace-pre-wrap">{{ $message['message'] }}</p>

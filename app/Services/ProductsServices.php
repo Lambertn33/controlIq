@@ -11,7 +11,7 @@ class ProductsServices
         $query = Product::query();
         
         if ($category) {
-            $category = Category::where('name', $category)->first();
+            $category = Category::where('name', 'like', '%' . $category . '%')->first();
             if (!$category) {
                 throw new \Exception('Category not found');
             }

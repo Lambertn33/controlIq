@@ -68,5 +68,12 @@ class Chat extends Component
             'message' => $message,
             'timestamp' => now()->toDateTimeString(),
         ];
+        
+        $this->dispatch('scroll-to-bottom');
+    }
+    
+    public function updatedMessages()
+    {
+        $this->dispatch('scroll-to-bottom');
     }
 }
