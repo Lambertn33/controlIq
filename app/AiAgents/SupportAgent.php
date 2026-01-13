@@ -107,4 +107,16 @@ class SupportAgent extends Agent
     {
         return ProductsServices::checkIfCategoryExists($name);
     }
+
+    #[Tool('check if a product exists. Use this when user asks to check if a product exists. Pass the product name to check')]
+    public function checkIfProductExists(string $name)
+    {
+        return ProductsServices::checkIfProductExists($name);
+    }
+
+    #[Tool('create a new product. Use this when user asks to create a new product. Pass the product name, price, quantity and category to create')]
+    public function createProduct(string $name, float $price, int $quantity, string $category)
+    {
+        return ProductsServices::createProduct($name, $price, $quantity, $category);
+    }
 }

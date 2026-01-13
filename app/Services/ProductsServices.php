@@ -22,7 +22,7 @@ class ProductsServices
 
     public static function createProduct(string $name, float $price, int $quantity, string $category)
     {
-        $category = Category::where('name', $category)->first();
+        $category = Category::where('name', 'like', '%' . $category . '%')->first();
         if (!$category) {
             throw new \Exception('Category not found');
         }
@@ -52,5 +52,10 @@ class ProductsServices
     public static function checkIfCategoryExists(string $name)
     {
         return Category::where('name', $name)->exists();
+    }
+
+    public static function checkIfProductExists(string $name)
+    {
+        return Product::where('name', $name)->exists();
     }
 }
