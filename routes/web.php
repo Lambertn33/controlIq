@@ -19,4 +19,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/data', function () {
         return view('data');
     })->name('data');
+    
+    // File download routes
+    Route::get('/download/categories', function () {
+        return \App\Services\FilesServices::downloadCategoriesFile();
+    })->name('download.categories');
+    
+    Route::get('/download/products', function () {
+        return \App\Services\FilesServices::downloadProductsFile();
+    })->name('download.products');
 });

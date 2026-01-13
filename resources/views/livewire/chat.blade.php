@@ -9,9 +9,20 @@
         },
         get isButtonDisabled() {
             return $wire.isSending || !$wire.enteredMessage || $wire.enteredMessage.trim() === '';
+        },
+        triggerDownload(url) {
+            // Create a temporary anchor element to trigger download
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = '';
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 }" x-init="scrollToBottom()"
-    @scroll-to-bottom.window="scrollToBottom()" x-effect="$watch('$wire.messages.length', () => scrollToBottom())">
+    @scroll-to-bottom.window="scrollToBottom()" @trigger-download.window="triggerDownload($event.detail.url)"
+    x-effect="$watch('$wire.messages.length', () => scrollToBottom())">
     <!-- Messages Container Header -->
     <div class="flex items-center justify-between mb-2 px-2">
         <h3 class="text-sm font-semibold text-gray-700">Chat History</h3>
@@ -51,6 +62,21 @@
                                 ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-tr-sm'
                                 : 'bg-white text-gray-900 border border-gray-200 rounded-tl-sm shadow-sm' }}">
                             <p class="whitespace-pre-wrap text-sm leading-relaxed">{{ $message['message'] }}</p>
+                            @if (isset($message['download_url']) && $message['download_url'])
+                                <div class="mt-3 pt-3 border-t border-gray-200">
+                                    <a href="{{ $message['download_url'] }}" target="_blank"
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                            </path>
+                                        </svg>
+                                        Download
+                                        {{ str_contains($message['download_url'], 'categories') ? 'Categories' : 'Products' }}
+                                        PDF
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                         <p class="text-xs text-gray-500 mt-1 px-1">
                             {{ \Carbon\Carbon::parse($message['timestamp'])->format('H:i') }}
